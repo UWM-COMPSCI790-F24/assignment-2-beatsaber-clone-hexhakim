@@ -1,0 +1,85 @@
+[gd_scene load_steps=15 format=3 uid="uid://b1baekgnuue82"]
+
+[ext_resource type="Script" path="res://Scripts/StartXR.gd" id="1_dey8f"]
+[ext_resource type="PackedScene" uid="uid://b2fy330sal7e" path="res://Scenes/Floor.tscn" id="1_osct5"]
+[ext_resource type="PackedScene" uid="uid://cnwp7ndjr4s8y" path="res://Models/Quest2Controllers/OculusQuest2TouchController_Left.gltf" id="2_xtpwi"]
+[ext_resource type="Script" path="res://Scripts/PointingInteraction.gd" id="3_i8kpg"]
+[ext_resource type="PackedScene" uid="uid://bc8lh0rihgxvi" path="res://Models/Quest2Controllers/OculusQuest2TouchController_Right.gltf" id="3_itx06"]
+[ext_resource type="Script" path="res://Scripts/LineRenderer.gd" id="4_25kos"]
+[ext_resource type="Script" path="res://Scripts/CubeSpawner.gd" id="9_7bnl4"]
+[ext_resource type="PackedScene" uid="uid://cqjq0f1seg45y" path="res://Scenes/Cube.tscn" id="9_ucsyf"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hteus"]
+transparency = 1
+albedo_color = Color(0.973327, 0.204929, 0.274196, 1)
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_oru28"]
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_6qtqn"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2a13r"]
+sky_top_color = Color(0.255818, 0.785284, 0.975536, 1)
+sky_horizon_color = Color(0.290196, 0.733333, 0.713726, 1)
+ground_bottom_color = Color(0.380625, 0.763906, 0.97081, 1)
+ground_horizon_color = Color(0.291556, 0.73447, 0.715345, 1)
+
+[sub_resource type="Sky" id="Sky_rvb08"]
+sky_material = SubResource("ProceduralSkyMaterial_2a13r")
+
+[sub_resource type="Environment" id="Environment_g6xpr"]
+background_mode = 2
+sky = SubResource("Sky_rvb08")
+
+[node name="Main" type="Node3D"]
+
+[node name="XROrigin3D" type="XROrigin3D" parent="."]
+script = ExtResource("1_dey8f")
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
+
+[node name="LeftController" type="XRController3D" parent="XROrigin3D"]
+tracker = &"left_hand"
+script = ExtResource("3_i8kpg")
+
+[node name="OculusQuest2TouchController_Left" parent="XROrigin3D/LeftController" instance=ExtResource("2_xtpwi")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="LineRenderer" type="MeshInstance3D" parent="XROrigin3D/LeftController"]
+material_override = SubResource("StandardMaterial3D_hteus")
+mesh = SubResource("ImmediateMesh_oru28")
+script = ExtResource("4_25kos")
+
+[node name="RightController" type="XRController3D" parent="XROrigin3D"]
+tracker = &"right_hand"
+script = ExtResource("3_i8kpg")
+
+[node name="OculusQuest2TouchController_Right" parent="XROrigin3D/RightController" instance=ExtResource("3_itx06")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="LineRenderer" type="MeshInstance3D" parent="XROrigin3D/RightController"]
+material_override = SubResource("StandardMaterial3D_hteus")
+mesh = SubResource("ImmediateMesh_6qtqn")
+script = ExtResource("4_25kos")
+
+[node name="RayCast3D" type="RayCast3D" parent="XROrigin3D/RightController"]
+collision_mask = 3
+collide_with_areas = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_g6xpr")
+
+[node name="Floor" parent="WorldEnvironment" instance=ExtResource("1_osct5")]
+visible = false
+
+[node name="CubeSpawner" type="Node3D" parent="."]
+script = ExtResource("9_7bnl4")
+cube1_scene = ExtResource("9_ucsyf")
+cube2_scene = ExtResource("9_ucsyf")
+cube1_color = Color(1, 0, 0, 1)
+cube2_color = Color(0, 1, 0, 1)
+
+[node name="CubeTimer" type="Timer" parent="CubeSpawner"]
+wait_time = 1.25
+autostart = true
+
+[connection signal="button_pressed" from="XROrigin3D/RightController" to="XROrigin3D" method="_on_right_controller_joystick_pressed"]
