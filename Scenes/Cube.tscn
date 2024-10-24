@@ -1,18 +1,24 @@
-[gd_scene load_steps=3 format=3 uid="uid://cqjq0f1seg45y"]
+[gd_scene load_steps=4 format=3 uid="uid://dvj7jbx8vj5cx"]
 
-[ext_resource type="Script" path="res://Scripts/CubeMotion.gd" id="1_afiin"]
+[ext_resource type="Script" path="res://Scripts/CubeMotion.gd" id="1_lv5tr"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_ejwht"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_2wgnq"]
+size = Vector3(0.35, 0.35, 0.35)
 
-[node name="CubeNode" type="Node3D"]
-script = ExtResource("1_afiin")
+[sub_resource type="BoxShape3D" id="BoxShape3D_3vibc"]
+size = Vector3(0.35, 0.35, 0.35)
+
+[node name="CubeNode" type="RigidBody3D"]
+script = ExtResource("1_lv5tr")
+speed = 1.35
 
 [node name="Cube" type="CSGBox3D" parent="."]
-size = Vector3(0.5, 0.5, 0.5)
+size = Vector3(0.35, 0.35, 0.35)
 
-[node name="Area3D" type="Area3D" parent="." groups=["cubes"]]
-collision_layer = 3
-collision_mask = 3
+[node name="Area3D" type="Area3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-shape = SubResource("BoxShape3D_ejwht")
+shape = SubResource("BoxShape3D_2wgnq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_3vibc")

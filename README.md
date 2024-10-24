@@ -9,11 +9,11 @@ In this assignment, you will be implementing Beat Saber's core mechanics. You ca
 
 You should fill out this information before submitting your assignment.  Make sure to document the name and source of any third party assets such as 3D models, textures, or any other content used that was not solely written by you.  Include sufficient detail for the instructor or TA to easily find them, such as a download link.
 
-Name: 
+Name: Md Azizul Hakim
 
-UWM Email:
+UWM Email: <hakimm@uwm.edu>
 
-Third Party Assets:
+Third Party Assets: The Oculus Contoller model and the LineRenderer script that Jerald provided. And three royalty-free sound assets.
 
 ## Getting Started
 
